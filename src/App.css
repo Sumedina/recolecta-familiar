@@ -1,0 +1,124 @@
+body{
+  font-family: system-ui;
+  background: linear-gradient(135deg,#f7f8fc,#eef2ff);
+  margin:0;
+}
+
+.container{
+  max-width:800px;
+  margin:auto;
+  padding:40px;
+  text-align:center;
+}
+
+h1{
+  font-size:2.5rem;
+  color:#333;
+}
+
+.message{
+  margin-bottom:30px;
+  font-size:1.1rem;
+  color:#555;
+}
+
+.progress-container{
+  margin-bottom:30px;
+}
+
+.progress-bar{
+  height:30px;
+  background:#e5e7eb;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,#22c55e,#16a34a);
+  transition:width 0.5s ease;
+}
+
+.progress-percent{
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.form{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:30px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  color: #000;
+  background-color: #fff;
+}
+
+.form input{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.form button{
+  background:#2563eb;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.form button:hover{
+  background:#1d4ed8;
+}
+
+.donation-table{
+  width:100%;
+  border-collapse:collapse;
+  
+}
+
+.donation-table input {
+  width: 90%;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  color: #000;
+}
+
+.donation-table th,
+.donation-table td{
+  padding:12px;
+  border-bottom:1px solid #ddd;
+}
+
+.donation-table th{
+  background:#f3f4f6;
+}
+
+.donation-table button{
+  margin: 0 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.donation-table button:hover{
+  opacity: 0.8;
+}
+
+.donation-table button:first-child{
+  background-color: #facc15;
+  color:#333;
+}
+
+.donation-table button:last-child{
+  background-color: #ef4444;
+  color:white;
+}
