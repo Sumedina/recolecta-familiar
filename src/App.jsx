@@ -1,88 +1,193 @@
 import { useState, useEffect } from "react";
+
+import "./App.css";
+
 import ProgressBar from "./components/ProgressBar";
 import DonationForm from "./components/DonationForm";
 import DonationList from "./components/DonationList";
-import { db, collection, query, orderBy, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "./firebase";
-import "./App.css";
+import History from "./components/History";
+
+import {
+  db,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDocs
+} from "./firebase";
 
 const GOAL = 13700;
 
 export default function App() {
   const [donations, setDonations] = useState([]);
+  const [history, setHistory] = useState([]);
 
-  // Devuelve mes actual en formato YYYY-M
   const monthString = () => {
     const now = new Date();
+
     return `${now.getFullYear()}-${now.getMonth() + 1}`;
   };
 
   const currentMonth = monthString();
 
   useEffect(() => {
-    // colección específica por mes
-    const colRef = collection(db, "donations-" + currentMonth);
-    const q = query(colRef, orderBy("date", "asc"));
+    const colRef = collection(
+      db,
+      "donations-" + currentMonth
+    );
 
-    // Escuchar cambios en tiempo real
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setDonations(data);
-    });
+    const q = query(
+      colRef,
+      orderBy("date", "asc")
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const data = snapshot.docs.map(
+          (doc) => ({
+            id: doc.id,
+            ...doc.data()
+          })
+        );
+
+        setDonations(data);
+      }
+    );
 
     return () => unsubscribe();
   }, [currentMonth]);
 
-  // Agregar donación
-  const addDonation = async (donation) => {
-    try {
-      const colRef = collection(db, "donations-" + currentMonth);
-      await addDoc(colRef, donation);
-    } catch (error) {
-      console.error("Error agregando aporte:", error);
-    }
+  useEffect(() => {
+    const loadHistory = async () => {
+      const months = [
+        "2026-3",
+        "2026-4",
+        "2026-5"
+      ];
+
+      const historyData = [];
+
+      for (const month of months) {
+        const snapshot = await getDocs(
+          collection(
+            db,
+            "donations-" + month
+          )
+        );
+
+        const docs = snapshot.docs.map(
+          (doc) => doc.data()
+        );
+
+        const total = docs.reduce(
+          (sum, d) =>
+            sum + Number(d.amount),
+          0
+        );
+
+        historyData.push({
+          month,
+          total
+        });
+      }
+
+      historyData.sort((a, b) =>
+        b.month.localeCompare(a.month)
+      );
+
+      setHistory(historyData);
+    };
+
+    loadHistory();
+  }, []);
+
+  const addDonation = async (
+    donation
+  ) => {
+    const colRef = collection(
+      db,
+      "donations-" + currentMonth
+    );
+
+    await addDoc(colRef, donation);
   };
 
-  // Editar donación
-  const updateDonation = async (index, newDonation) => {
-    try {
-      const donationId = donations[index].id;
-      const docRef = doc(db, "donations-" + currentMonth, donationId);
-      await updateDoc(docRef, newDonation);
-    } catch (error) {
-      console.error("Error editando aporte:", error);
-    }
+  const updateDonation = async (
+    index,
+    newDonation
+  ) => {
+    const donationId =
+      donations[index].id;
+
+    const docRef = doc(
+      db,
+      "donations-" + currentMonth,
+      donationId
+    );
+
+    await updateDoc(
+      docRef,
+      newDonation
+    );
   };
 
-  // Eliminar donación
-  const removeDonation = async (index) => {
-    try {
-      const donationId = donations[index].id;
-      const docRef = doc(db, "donations-" + currentMonth, donationId);
-      await deleteDoc(docRef);
-    } catch (error) {
-      console.error("Error eliminando aporte:", error);
-    }
+  const removeDonation = async (
+    index
+  ) => {
+    const donationId =
+      donations[index].id;
+
+    const docRef = doc(
+      db,
+      "donations-" + currentMonth,
+      donationId
+    );
+
+    await deleteDoc(docRef);
   };
 
-  // Suma total
-  const total = donations.reduce((sum, d) => sum + Number(d.amount), 0);
+  const total = donations.reduce(
+    (sum, d) =>
+      sum + Number(d.amount),
+    0
+  );
 
   return (
     <div className="container">
-      <h1>Meta Familiar ❤️</h1>
+      <h1>
+        ❤️ Recolecta Familiar ❤️
+      </h1>
 
       <p className="message">
-        "El amor de una familia es el mayor regalo de la vida.  
-        Cada pequeño aporte es una muestra de cariño, unión y esperanza."
+        Cada aporte representa amor,
+        apoyo y unión familiar.
       </p>
 
-      <ProgressBar total={total} goal={GOAL} />
-      <DonationForm addDonation={addDonation} />
+      <ProgressBar
+        total={total}
+        goal={GOAL}
+      />
+
+      <DonationForm
+        addDonation={addDonation}
+      />
+
       <DonationList
         donations={donations}
-        updateDonation={updateDonation}
-        removeDonation={removeDonation}
+        updateDonation={
+          updateDonation
+        }
+        removeDonation={
+          removeDonation
+        }
       />
+
+      <History history={history} />
     </div>
   );
 }

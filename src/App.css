@@ -159,3 +159,35 @@ h1{
     font-size: 14px;
   }
 }
+
+.history-section{
+  margin-top:40px;
+}
+
+.history-button{
+  background:#7c3aed;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+.history-button:hover{
+  background:#6d28d9;
+}
+
+.history-list{
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.history-card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
