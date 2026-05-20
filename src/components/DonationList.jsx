@@ -133,11 +133,11 @@ export default function DonationList({ donations, updateDonation, removeDonation
 
                 <td>
                   <button onClick={() => startEditing(index)}>
-                    ✏️ Editar
+                    Editar
                   </button>
 
                   <button onClick={() => removeDonation(index)}>
-                    🗑️ Eliminar
+                    Eliminar
                   </button>
                 </td>
               </>

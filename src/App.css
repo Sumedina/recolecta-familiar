@@ -190,4 +190,49 @@ h1{
   padding:20px;
   border-radius:12px;
   box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.history-card:hover{
+  transform:translateY(-2px);
+}
+
+.history-card h3{
+  margin:0;
+  color:#333;
+}
+
+.history-card p{
+  margin-top:10px;
+  color:#555;
+}
+
+.history-details{
+  margin-top:20px;
+  border-top:1px solid #eee;
+  padding-top:15px;
+}
+
+.history-donation{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  text-align:center;
+  padding:10px 0;
+  border-bottom:1px solid #f3f4f6;
+  color:#333;
+}
+
+.history-donation:last-child{
+  border-bottom:none;
+}
+
+@media(max-width:768px){
+
+  .history-donation{
+    grid-template-columns:1fr;
+    gap:5px;
+    text-align:center;
+  }
+
 }

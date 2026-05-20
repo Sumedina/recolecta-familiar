@@ -2,6 +2,7 @@ import { useState } from "react";
 
 export default function History({ history }) {
   const [showHistory, setShowHistory] = useState(false);
+  const [openMonth, setOpenMonth] = useState(null);
 
   const formatMonth = (monthKey) => {
     const [year, month] = monthKey.split("-");
@@ -31,11 +32,39 @@ export default function History({ history }) {
     });
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    const months = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ];
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  };
+
   return (
     <div className="history-section">
+
       <button
         className="history-button"
-        onClick={() => setShowHistory(!showHistory)}
+        onClick={() =>
+          setShowHistory(!showHistory)
+        }
       >
         {showHistory
           ? "Ocultar Historial"
@@ -43,12 +72,23 @@ export default function History({ history }) {
       </button>
 
       {showHistory && (
+
         <div className="history-list">
+
           {history.map((item, index) => (
+
             <div
               key={index}
               className="history-card"
+              onClick={() =>
+                setOpenMonth(
+                  openMonth === item.month
+                    ? null
+                    : item.month
+                )
+              }
             >
+
               <h3>
                 {formatMonth(item.month)}
               </h3>
@@ -60,10 +100,50 @@ export default function History({ history }) {
                   C$ {formatCurrency(item.total)}
                 </strong>
               </p>
+
+              {openMonth === item.month && (
+
+                <div className="history-details">
+
+                  {item.donations.map(
+                    (donation, i) => (
+
+                      <div
+                        key={i}
+                        className="history-donation"
+                      >
+
+                        <div>
+                          <strong>
+                            {donation.name}
+                          </strong>
+                        </div>
+
+                        <div>
+                            {formatCurrency(
+                            donation.amount
+                          )}
+                        </div>
+
+                        <div>
+                          {formatDate(
+                            donation.date
+                          )}
+                        </div>
+
+                      </div>
+                    )
+                  )}
+
+                </div>
+              )}
+
             </div>
           ))}
+
         </div>
       )}
+
     </div>
   );
 }

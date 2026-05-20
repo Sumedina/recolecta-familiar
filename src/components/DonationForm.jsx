@@ -43,7 +43,7 @@ export default function DonationForm({ addDonation }) {
         onChange={(e) => setDate(e.target.value)}
       />
 
-      <button type="submit">Agregar aporte ❤️</button>
+      <button type="submit">Agregar aporte</button>
     </form>
   );
 }

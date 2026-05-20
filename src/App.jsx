@@ -63,48 +63,53 @@ export default function App() {
   }, [currentMonth]);
 
   useEffect(() => {
-    const loadHistory = async () => {
-      const months = [
-        "2026-3",
-        "2026-4",
-        "2026-5"
-      ];
+  const loadHistory = async () => {
+    const months = [
+      "2026-3",
+      "2026-4",
+      "2026-5"
+    ];
 
-      const historyData = [];
+    const historyData = [];
 
-      for (const month of months) {
-        const snapshot = await getDocs(
-          collection(
-            db,
-            "donations-" + month
-          )
-        );
+    for (const month of months) {
 
-        const docs = snapshot.docs.map(
-          (doc) => doc.data()
-        );
-
-        const total = docs.reduce(
-          (sum, d) =>
-            sum + Number(d.amount),
-          0
-        );
-
-        historyData.push({
-          month,
-          total
-        });
-      }
-
-      historyData.sort((a, b) =>
-        b.month.localeCompare(a.month)
+      const snapshot = await getDocs(
+        collection(
+          db,
+          "donations-" + month
+        )
       );
 
-      setHistory(historyData);
-    };
+      const docs = snapshot.docs.map(
+        (doc) => ({
+          id: doc.id,
+          ...doc.data()
+        })
+      );
 
-    loadHistory();
-  }, []);
+      const total = docs.reduce(
+        (sum, d) =>
+          sum + Number(d.amount),
+        0
+      );
+
+      historyData.push({
+        month,
+        total,
+        donations: docs
+      });
+    }
+
+    historyData.sort((a, b) =>
+      b.month.localeCompare(a.month)
+    );
+
+    setHistory(historyData);
+  };
+
+  loadHistory();
+}, []);
 
   const addDonation = async (
     donation
@@ -160,12 +165,12 @@ export default function App() {
   return (
     <div className="container">
       <h1>
-        ❤️ Recolecta Familiar ❤️
+        Meta Familiar ❤️
       </h1>
 
       <p className="message">
-        Cada aporte representa amor,
-        apoyo y unión familiar.
+        "El amor de una familia es el mayor regalo de la vida.
+        Cada pequeño aporte es una muestra de cariño, unión y esperanza."
       </p>
 
       <ProgressBar
